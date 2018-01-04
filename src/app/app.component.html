@@ -1,20 +1,77 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
+<div class="container-fluid">
+
+
+  <div class="row">
+    <div class="col-md-12">
+    </div>
+
+    <h1>
     Welcome to {{ title }}!
   </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
+    <h1>{{ title }}</h1>
+
+  </div>
+  <div class="map">
+
+    <!-- this creates a google map on the page with the given lat/lng from -->
+    <!-- the component as the initial center of the map: -->
+    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false" (mapClick)="mapClicked($event)" [panControl]="true" [usePanning]="true" [rotateControl]="true">
+
+      // This is the polyline
+      <agm-polyline [editable]="true">
+        <agm-polyline-point *ngFor="let data of polyline" [latitude]="data.lat" [longitude]="data.lng">
+        </agm-polyline-point>
+      </agm-polyline>
+      <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)">
+
+        <agm-info-window>
+          <strong>{{m.label}}</strong>
+          <br/>
+          <button type="button" (click)="removeMarker(m)">DELETE</button>
+
+        </agm-info-window>
+      </agm-marker>
+    </agm-map>
+
+  </div>
+
+</div>
+
+<div class="row">
+
+  <div class="col-md-6">
+
+    <h2>
+    Add the Points here and you see the pointer above.
+
+    </h2>
+  </div>
+</div>
+
+<div>
+
+  <form #user_Form="ngForm" (ngSubmit)="addMarker(user_Form.value)" class="form-horizontal">
+
+    <div class="form-group">
+      <div class="col-sm-10">
+        <label class="control-label col-sm-2">Latitude</label>
+        <input type="text" class="form-control" name="markerLat" ngModel>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">Longitude name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="markerLng" ngModel>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">submit</button>
+      </div>
+    </div>
+  </form>
+
+</div>
